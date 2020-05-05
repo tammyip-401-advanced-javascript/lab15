@@ -8,7 +8,7 @@ class Node {
   }
 }
 
-class BinarySearchTree {
+class BinaryTree {
   constructor(value) {
     this.root = new Node(value)
     this.count = 0
@@ -85,49 +85,68 @@ class BinarySearchTree {
 
   // in-order
   // left, root, right
-  dfsInOrder() {
+  inOrder(node) {
     let result = []
 
-    const traverse = node => {
-      // if left child exists, go left again
-      if (node.left) traverse(node.left)
-      //capture root node value
-      result.push(node.value)
-      //if right child exists, go right again
-      if (node.right) traverse(node.right)
+    if (!node) {
+      return;
+    }
+    // if left child exists, go left again
+    if (node.left) {
+      this.inOrder(node.left)
+    }
+    //capture root node value
+    result.push(node.value)
+
+    //if right child exists, go right again
+    if (node.right) {
+      this.inOrder(node.right)
     }
     return result;
   }
 
   // pre-order
   // root, left, right
-  dfsPreOrder() {
+  preOrder(node) {
     let result = []
 
-    const traverse = node => {
-      //capture root node value
-      result.push(node.value)
-      // if left child exists, go left again
-      if (node.left) traverse(node.left)
-      //if right child exists, go right again
-      if (node.right) traverse(node.right)
+    if (!node) {
+      return;
+    }
+    //capture root node value
+    result.push(node.value)
+
+    // if left child exists, go left again
+    if (node.left) {
+      this.preOrder(node.left)
+    }
+    //if right child exists, go right again
+    if (node.right) {
+      this.preOrder(node.right)
     }
     return result;
   }
 
   //post-order
   //left, right, roof
-  dfsPostOrder() {
+  postOrder(node) {
     let result = []
 
-    const traverse = node => {
-      // if left child exists, go left again
-      if (node.left) traverse(node.left)
-      //if right child exists, go right again
-      if (node.right) traverse(node.right)
-      //capture root node value
-      result.push(node.value)
+    if (!node) {
+      return;
     }
+
+    // if left child exists, go left again
+    if (node.left) {
+      this.postOrder(node.left)
+    }
+    //if right child exists, go right again
+    if (node.right) {
+      this.postOrder(node.right)
+    }
+    //capture root node value
+    result.push(node.value)
+
     return result;
   }
 
@@ -136,4 +155,4 @@ class BinarySearchTree {
 
 }
 
-module.export = BinarySearchTree;
+module.export = BinaryTree

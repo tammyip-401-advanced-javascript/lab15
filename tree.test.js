@@ -7,82 +7,121 @@
 // You can successfully add a value to a binary search tree
 // You can search a binary search tree for a value and get the correct true/false result
 
-const Tree = require('./tree.js');
+const BinaryTree = require('./tree.js');
 
-describe('queue operations', () => {
-  it('can successfully enqueue', () => {
-    let myQueue = new Queue();
-    myQueue.enqueue('red');
+describe('tree', () => {
 
-    expect(myQueue.isEmpty()).toBe(false);
-    expect(myQueue.peek()).toBe('red');
-  });
+  it('can instantiate an empty tree', () => {
+    const binaryTree = new BinaryTree();
+    expect(binaryTree.node).toBeUndefined;
+  })
 
-  it('can successfully enqueue multiple values into a queue', () => {
-    let myQueue = new Queue();
-    myQueue.enqueue('red');
-    myQueue.enqueue('orange');
-    myQueue.enqueue('green');
-    myQueue.enqueue('blue');
+  describe('add', () => {
+    it('can add a single root node', () => {
+      const binaryTree = new BinaryTree();
+      binaryTree.add(3)
+      expect(binaryTree.node.value).toEqual(3)
+    })
 
-    expect(myQueue.isEmpty()).toBe(false);
-    expect(myQueue.peek()).toBe('red');
-  });
+    it('can add a left and right child to a single root node', () => {
+      const binaryTree = new BinaryTree();
+      binaryTree.add(4);
+      binaryTree.add(3);
+      binaryTree.add(5);
 
-  it('can successfully dequeue out of a queue', () => {
-    let myQueue = new Queue();
-    myQueue.enqueue('red');
-    myQueue.enqueue('orange');
+      expect(binaryTree.node.left.value).toEqual(3);
+      expect(binaryTree.node.right.value).toEqual(5);
+    })
+  })
 
-    expect(myQueue.isEmpty()).toBe(false);
-    expect(myQueue.peek()).toBe('red');
+  describe('preOrder()', () => {
+    let binaryTree;
+    beforeEach(() => {
+      binaryTree = new BinaryTree();
+      binaryTree.add(12)
+      binaryTree.add(2)
+      binaryTree.add(15)
+    })
 
-    let dequeuedNode = myQueue.dequeue();
+    it('looks at the root first', () => {
+      const binaryTreePreOrder = binaryTree.preOrder(binaryTree.node)
+      expect(binaryTreePreOrder[0]).toEqual(12);
+    })
 
-    expect(dequeuedNode.val).toBe('red');
-  });
+    it('traverses to the left side next', () => {
+      const binaryTreePreOrder = binaryTree.preOrder(binaryTree.node)
+      expect(binaryTreePreOrder[1]).toEqual(2);
+    })
 
-  it('can successfully empty a queue after multiple dequeues', () => {
-    let myQueue = new Queue();
-    myQueue.enqueue(1);
-    myQueue.enqueue(2);
-    myQueue.enqueue(3);
+    it('traverses to the right side last', () => {
+      const binaryTreePreOrder = binaryTree.preOrder(binaryTree.node)
+      expect(binaryTreePreOrder[2]).toEqual(15);
 
-    myQueue.dequeue();
-    myQueue.dequeue();
-    myQueue.dequeue();
+    })
+  })
 
-    console.log(myQueue);
+  describe('inOrder()', () => {
+    let binaryTree;
+    beforeEach(() => {
+      binaryTree = new BinaryTree();
+      binaryTree.add(12)
+      binaryTree.add(2)
+      binaryTree.add(15)
+    })
 
-    expect(myQueue.isEmpty()).toBe(true);
-    expect(myQueue.front).toBe(null);
-  });
+    it('looks at the left node first', () => {
+      const inOrderTree = binaryTree.inOrder(binaryTree.node)
+      expect(inOrderTree[0]).toEqual(2);
+    })
 
-  it('can successfully peek into a queue, seeing the expected value', () => {
-    let myQueue = new Queue();
-    myQueue.enqueue('red');
+    it('traverses to the root next', () => {
+      const inOrderTree = binaryTree.inOrder(binaryTree.node)
+      expect(inOrderTree[1]).toEqual(12);
+    })
 
-    expect(myQueue.peek()).toBe('red');
-  });
+    it('traverses to the right side last', () => {
+      const inOrderTree = binaryTree.inOrder(binaryTree.node)
+      expect(inOrderTree[2]).toEqual(15);
+    })
+  })
 
-  it('can successfully instantiate an empty queue', () => {
-    let myQueue = new Queue();
+  describe('postOrder()', () => {
+    let binaryTree;
+    beforeEach(() => {
+      binaryTree = new BinaryTree();
+      binaryTree.add(12)
+      binaryTree.add(2)
+      binaryTree.add(15)
+    })
 
-    expect(myQueue.isEmpty()).toBe(true);
-    expect(myQueue.front).toBe(null);
-  });
+    it('looks at the left node first', () => {
+      const postOrderTree = binaryTree.postOrder(binaryTree.node)
+      expect(postOrderTree[0]).toEqual(2);
+    })
 
-  it('raises an exception when dequeue or peek on empty queue', () => {
-    let myQueue = new Queue();
+    it('traverses to right next', () => {
+      const postOrderTree = binaryTree.postOrder(binaryTree.node)
+      expect(postOrderTree[1]).toEqual(15);
+    })
 
-    expect(myQueue.isEmpty()).toBe(true);
-    expect(myQueue.front).toBe(null);
+    it('traverses to the root last', () => {
+      const postOrderTree = binaryTree.postOrder(binaryTree.node)
+      expect(postOrderTree[2]).toEqual(12);
+    })
+  })
 
-    expect(() => {
-      myQueue.peek();
-    }).toThrow();
-    expect(() => {
-      myQueue.dequeue();
-    }).toThrow();
-  });
-});
+  describe('contains()', () => {
+    let binaryTree;
+    beforeEach(() => {
+      binaryTree = new BinaryTree();
+      binaryTree.add(12)
+      binaryTree.add(2)
+      binaryTree.add(15)
+    })
+    it('can search a value and return true or false', () => {
+      const binaryTree = binaryTree.contains(binaryTree.node)
+      expect(binaryTree.contains(12)).toEqual(true);
+      expect(binaryTree.contains(3)).toEqual(false);
+    })
+  })
+})
