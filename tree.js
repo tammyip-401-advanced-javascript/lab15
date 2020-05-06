@@ -2,63 +2,118 @@
 
 class Node {
   constructor(value) {
-    this.value = value
+    this.val = value
     this.left = null
     this.right = null
   }
 }
 
 class BinaryTree {
-  constructor(value) {
-    this.root = new Node(value)
+  constructor() {
+    this.root = null;
     this.count = 0
   }
 
-  size() {
-    return this.count
+  //depth first search - branch by branch
+
+  // in-order
+  // left, root, right
+  inOrder() {
+
+    function inHelper(node, result) {
+      if (!node) {
+        return result;
+      }
+      inHelper(node.left);
+      result.push(node.val);
+      inHelper(node.right);
+      return result;
+    }
+    return inHelper(this.root, []);
+  }
+
+  // pre-order
+  // root, left, right
+  preOrder(node) {
+    // let result = []
+
+    if (!node) {
+      return;
+    }
+    //capture root node value
+    // result.push(node.val)
+
+    // if left child exists, go left again
+    let leftArr = [];
+    if (node.left) {
+      leftArr = this.preOrder(node.left)
+    }
+    //if right child exists, go right again
+    let rightArr = [];
+    if (node.right) {
+      rightArr = this.preOrder(node.right)
+    }
+    return [node.val, ...leftArr, ...rightArr];
+  }
+
+  //post-order
+  //left, right, root
+  postOrder() {
+    let result = [];
+
+    function postHelper(node) {
+      if (!node) {
+        return;
+      }
+      postHelper(node.left);
+      postHelper(node.right);
+      result.push(node.val);
+    }
+
+    //get the recursion started to tranverse the tree
+    postHelper(this.root);
+    return result;
+  }
+}
+
+class BinarySearchTree extends BinaryTree {
+  constructor() {
+    super();
   }
 
   add(val) {
-    this.count++
-
-    let newNode = new Node(val)
-
-    const searchTree = node => {
-      //if value < node.value, go left
-      if (val < node.value) {
-        if (!node.left) {
-          node.left = newNode
-        } else {
-          // if already had a node there, look left again to see if there's an open space
-          searchTree(node.left)
-        }
-      }
-      // if value > node.value, go right
-      else if (val > node.value) {
-        if (!node.right) {
-          node.right = newNode
-        } else {
-          searchTree(node.right)
-        }
-      }
+    const newNode = new Node(val);
+    if (!this.root) {
+      this.root = newNode;
+      return;
     }
-    searchTree(this.root);
+
+    let currentNode = this.root;
+
+    while (currentNode) {
+      if (currentNode.val > val) {
+        if (!currentNode.left) {
+          currentNode.left = newNode;
+          return;
+        } else currentNode = currentNode.left;
+      } else if (currentNode.val < val) {
+        if (!currentNode.right) {
+          currentNode.right = newNode;
+          return;
+        } else currentNode = currentNode.right;
+      } else if (currentNode.val === val) return;
+    }
   }
 
   contains(val) {
-    let currentNode = this.root
+    let currentNode = this.root;
 
     while (currentNode) {
-      if (val === currentNode.value) {
-        return true;
-      }
-      if (val < currentNode.value) {
-        currentNode = currentNode.left
-      } else {
-        currentNode = currentNode.right
-      }
+      if (currentNode.val > val) currentNode = currentNode.left;
+      else if (currentNode.val < val) currentNode = currentNode.right;
+      else if (currentNode.val === val) return true;
     }
-    //traverse the entire tree and exit the while loop, and never found the value
+
     return false;
   }
 
@@ -69,90 +124,21 @@ class BinaryTree {
     while (currentNode.left) {
       currentNode = currentNode.left
     }
-    return currentNode.value;
+    return currentNode.val;
   }
 
+  //find maximum value in a Binary Search Tree
   max() {
-    let currentNode = this.node
+    let currentNode = this.root
 
     while (currentNode.right) {
       currentNode = currentNode.right
     }
-    return currentNode.value;
+    return currentNode.val;
   }
-
-  //depth first search - branch by branch
-
-  // in-order
-  // left, root, right
-  inOrder(node) {
-    let result = []
-
-    if (!node) {
-      return;
-    }
-    // if left child exists, go left again
-    if (node.left) {
-      this.inOrder(node.left)
-    }
-    //capture root node value
-    result.push(node.value)
-
-    //if right child exists, go right again
-    if (node.right) {
-      this.inOrder(node.right)
-    }
-    return result;
-  }
-
-  // pre-order
-  // root, left, right
-  preOrder(node) {
-    let result = []
-
-    if (!node) {
-      return;
-    }
-    //capture root node value
-    result.push(node.value)
-
-    // if left child exists, go left again
-    if (node.left) {
-      this.preOrder(node.left)
-    }
-    //if right child exists, go right again
-    if (node.right) {
-      this.preOrder(node.right)
-    }
-    return result;
-  }
-
-  //post-order
-  //left, right, roof
-  postOrder(node) {
-    let result = []
-
-    if (!node) {
-      return;
-    }
-
-    // if left child exists, go left again
-    if (node.left) {
-      this.postOrder(node.left)
-    }
-    //if right child exists, go right again
-    if (node.right) {
-      this.postOrder(node.right)
-    }
-    //capture root node value
-    result.push(node.value)
-
-    return result;
-  }
-
   //breath first search - level by level
   //use a queue
 
 }
 
-module.export = BinaryTree
+module.exports = { BinaryTree, BinarySearchTree };
